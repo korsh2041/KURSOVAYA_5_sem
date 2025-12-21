@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Library — Преподаватель</title>
+    <style>
+        :root{
+          --border: 4px solid #000;
+          --w: 980px;
+        }
+        *{ box-sizing:border-box; }
+        body{
+          margin:0;
+          background:#fff;
+          color:#000;
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+        .page{
+          min-height:100vh;
+          display:flex;
+          justify-content:center;
+          padding:48px 20px;
+        }
+        .wrap{ width: min(var(--w), 100%); }
+
+        .topbar{
+          display:flex;
+          align-items:flex-end;
+          justify-content:space-between;
+          gap:16px;
+          margin-bottom:22px;
+        }
+        .title{
+          margin:0;
+          font-size:56px;
+          font-weight:800;
+          letter-spacing:.3px;
+          line-height:1;
+        }
+        .who{
+          text-align:right;
+          font-weight:900;
+          font-size:18px;
+          line-height:1.2;
+        }
+
+        .tabs{
+          display:flex;
+          gap:12px;
+          margin-bottom:16px;
+          flex-wrap:wrap;
+        }
+        .tab{
+          border: var(--border);
+          background:#fff;
+          color:#000;
+          padding:10px 14px;
+          font-weight:900;
+          font-size:18px;
+          cursor:pointer;
+          user-select:none;
+        }
+        .tab.active{
+          background:#000;
+          color:#fff;
+        }
+
+        .panel{
+          border: var(--border);
+          padding:18px;
+          display:none;
+        }
+        .panel.active{ display:block; }
+
+        .row{
+          display:grid;
+          grid-template-columns: 1fr 1fr 180px 220px;
+          gap:12px;
+          margin-bottom:14px;
+        }
+        @media (max-width: 900px){
+          .row{ grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 520px){
+          .row{ grid-template-columns: 1fr; }
+          .topbar{ flex-direction:column; align-items:flex-start; }
+          .who{ text-align:left; }
+        }
+
+        .field{
+          width:100%;
+          border: var(--border);
+          padding:12px 14px;
+          font-size:16px;
+          font-weight:900;
+          outline:none;
+          background:#fff;
+          color:#000;
+        }
+        .field::placeholder{
+          color:#000;
+          opacity:1;
+          font-weight:900;
+        }
+
+        .btns{
+          display:flex;
+          gap:12px;
+          margin: 10px 0 18px;
+          flex-wrap:wrap;
+        }
+        .btn{
+          border: var(--border);
+          background:#fff;
+          color:#000;
+          padding:12px 14px;
+          font-weight:900;
+          font-size:16px;
+          cursor:pointer;
+          user-select:none;
+        }
+        .btn:hover{ background:#000; color:#fff; }
+
+        .btn-small{
+          border: 3px solid #000;
+          background:#fff;
+          color:#000;
+          padding:8px 10px;
+          font-weight:900;
+          font-size:14px;
+          cursor:pointer;
+          white-space:nowrap;
+        }
+        .btn-small:hover{ background:#000; color:#fff; }
+        .btn-small[disabled]{
+          opacity:.55;
+          cursor:not-allowed;
+        }
+        .btn-small[disabled]:hover{
+          background:#fff; color:#000;
+        }
+
+        .meta{
+          display:flex;
+          gap:12px;
+          align-items:center;
+          flex-wrap:wrap;
+          font-weight:900;
+          margin-bottom:12px;
+        }
+        .pill{
+          border: var(--border);
+          padding:8px 12px;
+          font-weight:900;
+        }
+
+        .notice{
+          border: var(--border);
+          padding:12px 14px;
+          font-weight:900;
+          margin: 0 0 14px 0;
+          display:none;
+          background:#ccffcc;
+        }
+
+        .table-wrap{
+          border: var(--border);
+          overflow:auto;
+          background:#fff;
+        }
+        table{
+          width:100%;
+          border-collapse:collapse;
+          min-width: 980px;
+        }
+        th, td{
+          border-bottom: 3px solid #000;
+          padding:10px 12px;
+          text-align:left;
+          vertical-align:top;
+          font-weight:900;
+        }
+        th{
+          position:sticky;
+          top:0;
+          background:#fff;
+          z-index:1;
+        }
+        tr:last-child td{ border-bottom:none; }
+
+        .link{
+          display:inline-block;
+          margin-top:16px;
+          font-weight:900;
+          color:#1f45ff;
+          text-decoration:none;
+        }
+        .link:hover{ text-decoration:underline; }
+
+        tr.overdue-row td{
+          background:#000;
+          color:#fff;
+        }
+        .status-pill{
+          display:inline-block;
+          padding:6px 10px;
+          border:3px solid #000;
+          font-weight:900;
+          white-space:nowrap;
+        }
+        .status-pill.ok{
+          background:#fff;
+          color:#000;
+        }
+        .status-pill.overdue{
+          background:#000;
+          color:#fff;
+        }
+
+        .p{
+          border: var(--border);
+          padding:8px 12px;
+          font-weight:900;
+        }
+    </style>
+</head>
+<body>
+<main class="page">
+    <section class="wrap" aria-label="Кабинет преподавателя">
+        <div class="topbar">
+            <h1 class="title">Library</h1>
+            <div class="who">Преподаватель</div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Навигация">
+            <button class="tab active" id="tabSearch" type="button" role="tab" aria-selected="true">Поиск книг</button>
+            <button class="tab" id="tabCatalog" type="button" role="tab" aria-selected="false">Каталог</button>
+            <button class="tab" id="tabLoans" type="button" role="tab" aria-selected="false">Мои выдачи</button>
+        </div>
+
+        <!-- Поиск -->
+        <div class="panel active" id="panelSearch" role="tabpanel" aria-labelledby="tabSearch">
+            <div class="notice" id="noticeSearch"></div>
+            <div class="row">
+                <input class="field" id="qTitle"  type="text" placeholder="Название (часть)" />
+                <input class="field" id="qAuthor" type="text" placeholder="Автор (часть)" />
+                <input class="field" id="qYear"   type="number" placeholder="Год" />
+                <input class="field" id="qIsbn"   type="text" placeholder="ISBN" />
+            </div>
+            <div class="btns">
+                <button class="btn" id="btnSearch" type="button">Искать</button>
+                <button class="btn" id="btnReset" type="button">Сброс</button>
+                <button class="btn" id="btnShowAll" type="button">Показать все</button>
+            </div>
+            <div class="meta">
+                <div class="p" id="searchCount">Найдено: 0</div>
+                <div class="p" id="totalCount">Всего: 0</div>
+                <div class="p" id="myLoans">Выдач: 0</div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>ISBN</th><th>Название</th><th>Автор</th><th>Год</th><th>Доступно</th><th>Действие</th></tr></thead>
+                    <tbody id="searchBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Каталог -->
+        <div class="panel" id="panelCatalog" role="tabpanel" aria-labelledby="tabCatalog">
+            <div class="notice" id="noticeCatalog"></div>
+            <div class="meta">
+                <div class="p" id="catalogCount">Книг: 0</div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>ISBN</th><th>Название</th><th>Автор</th><th>Год</th><th>Доступно</th><th>Действие</th></tr></thead>
+                    <tbody id="catalogBody"></tbody>
+                </table>
+            </div>
+            <a class="link" href="login.html">Выйти</a>
+        </div>
+
+        <!-- Мои выдачи -->
+        <div class="panel" id="panelLoans" role="tabpanel" aria-labelledby="tabLoans">
+            <div class="notice" id="noticeLoans"></div>
+            <div class="meta">
+                <div class="pill" id="loansCount">Выдач: 0</div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Книга</th><th>Автор</th><th>Выдача</th><th>Срок</th><th>Статус</th><th>Действие</th></tr></thead>
+                    <tbody id="loansBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    const API_URL = 'http://localhost:8080/api';
+
+    function checkAuth() {
+      const sessionId = localStorage.getItem('sessionId');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!sessionId || !user.userId) {
+        window.location.href = 'login.html';
+        return null;
+      }
+      return { sessionId, user };
+    }
+    
+    const auth = checkAuth();
+    if (auth) {
+      document.querySelector('.who').textContent = `${auth.user.userType}\n${auth.user.name}`;
+    }
+
+    let BOOKS = [];
+    let LOANS = [];
+
+    async function loadBooksFromAPI() {
+      try {
+        const response = await fetch(`${API_URL}/books`);
+        return await response.json();
+      } catch (error) {
+        console.error('Ошибка загрузки книг:', error);
+        return [];
+      }
+    }
+
+    async function loadLoansFromAPI() {
+      try {
+        if (!auth) return [];
+        const response = await fetch(`${API_URL}/loans/user/${auth.user.userId}`);
+        return await response.json();
+      } catch (error) {
+        console.error('Ошибка загрузки выдач:', error);
+        return [];
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+    }
+
+    function formatDate(d){
+      const date = new Date(d);
+      return date.toLocaleDateString('ru-RU');
+    }
+
+    function normalize(s){ return String(s).trim().toLowerCase(); }
+
+    function showNotice(el, text){
+      el.textContent = text;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    function updateStats(){
+      document.getElementById('totalCount').textContent = `Всего: ${BOOKS.length}`;
+      document.getElementById('catalogCount').textContent = `Книг: ${BOOKS.length}`;
+      document.getElementById('myLoans').textContent = `Выдач: ${LOANS.length}`;
+      document.getElementById('loansCount').textContent = `Выдач: ${LOANS.length}`;
+    }
+
+    function renderCatalog(){
+      document.getElementById('catalogBody').innerHTML = BOOKS.map(b => {
+        const avail = `${b.availableCopies}/${b.totalCopies}`;
+        const disabled = b.availableCopies <= 0 ? "disabled" : "";
+        return `<tr><td>${escapeHtml(b.isbn)}</td><td>${escapeHtml(b.title)}</td><td>${escapeHtml(b.author)}</td><td>${b.year}</td><td>${avail}</td><td><button class="btn-small" ${disabled} data-action="borrow" data-isbn="${escapeHtml(b.isbn)}">Взять</button></td></tr>`;
+      }).join('');
+    }
+
+    function renderSearch(rows){
+      document.getElementById('searchBody').innerHTML = rows.map(b => {
+        const avail = `${b.availableCopies}/${b.totalCopies}`;
+        const disabled = b.availableCopies <= 0 ? "disabled" : "";
+        return `<tr><td>${escapeHtml(b.isbn)}</td><td>${escapeHtml(b.title)}</td><td>${escapeHtml(b.author)}</td><td>${b.year}</td><td>${avail}</td><td><button class="btn-small" ${disabled} data-action="borrow" data-isbn="${escapeHtml(b.isbn)}">Взять</button></td></tr>`;
+      }).join('');
+      document.getElementById('searchCount').textContent = `Найдено: ${rows.length}`;
+    }
+
+    function renderLoans(){
+      document.getElementById('loansBody').innerHTML = LOANS.map(l => {
+        const status = new Date(l.dueAt) < new Date() ? 'ПРОСРОЧЕНО' : 'ОК';
+        return `<tr><td>${escapeHtml(l.title)}</td><td>${escapeHtml(l.author)}</td><td>${formatDate(l.borrowedAt)}</td><td>${formatDate(l.dueAt)}</td><td>${status}</td><td><button class="btn-small" data-action="return" data-loan-id="${escapeHtml(l.id)}">Вернуть</button></td></tr>`;
+      }).join('');
+    }
+
+    const tabSearch = document.getElementById('tabSearch');
+    const tabCatalog = document.getElementById('tabCatalog');
+    const tabLoans = document.getElementById('tabLoans');
+
+    function setTab(which){
+      const tabs = { search: [tabSearch, 'panelSearch'], catalog: [tabCatalog, 'panelCatalog'], loans: [tabLoans, 'panelLoans'] };
+      Object.values(tabs).forEach(([t, p]) => {
+        t.classList.remove('active');
+        document.getElementById(p).classList.remove('active');
+      });
+      tabs[which][0].classList.add('active');
+      document.getElementById(tabs[which][1]).classList.add('active');
+    }
+
+    tabSearch.addEventListener('click', () => setTab('search'));
+    tabCatalog.addEventListener('click', () => setTab('catalog'));
+    tabLoans.addEventListener('click', () => setTab('loans'));
+
+    const qTitle = document.getElementById('qTitle');
+    const qAuthor = document.getElementById('qAuthor');
+    const qYear = document.getElementById('qYear');
+    const qIsbn = document.getElementById('qIsbn');
+
+    function doSearch(){
+      const t = normalize(qTitle.value);
+      const a = normalize(qAuthor.value);
+      const y = normalize(qYear.value);
+      const i = normalize(qIsbn.value);
+      const res = BOOKS.filter(b => {
+        return (!t || normalize(b.title).includes(t)) &&
+               (!a || normalize(b.author).includes(a)) &&
+               (!y || String(b.year) === y) &&
+               (!i || normalize(b.isbn).includes(i));
+      });
+      renderSearch(res);
+    }
+
+    document.getElementById('btnSearch').addEventListener('click', doSearch);
+    document.getElementById('btnReset').addEventListener('click', () => {
+      qTitle.value = qAuthor.value = qYear.value = qIsbn.value = "";
+      document.getElementById('searchBody').innerHTML = "";
+      document.getElementById('searchCount').textContent = "Найдено: 0";
+    });
+    document.getElementById('btnShowAll').addEventListener('click', () => renderSearch(BOOKS));
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const action = btn.getAttribute('data-action');
+      const isbn = btn.getAttribute('data-isbn');
+      const loanId = btn.getAttribute('data-loan-id');
+      
+      if (action === 'borrow' && isbn) {
+        fetch(`${API_URL}/loans/borrow?userId=${auth.user.userId}&isbn=${isbn}`, { method: 'POST' })
+          .then(() => {
+            showNotice(document.getElementById('noticeSearch'), 'Книга выдана');
+            init();
+          })
+          .catch(() => showNotice(document.getElementById('noticeSearch'), 'Ошибка'));
+      }
+      if (action === 'return' && loanId) {
+        fetch(`${API_URL}/loans/return?loanId=${loanId}`, { method: 'POST' })
+          .then(() => {
+            showNotice(document.getElementById('noticeLoans'), 'Книга возвращена');
+            init();
+          })
+          .catch(() => showNotice(document.getElementById('noticeLoans'), 'Ошибка'));
+      }
+    });
+
+    async function init() {
+      BOOKS = await loadBooksFromAPI();
+      LOANS = await loadLoansFromAPI();
+      updateStats();
+      renderCatalog();
+      renderLoans();
+    }
+
+    init();
+</script>
+</body>
+</html>

@@ -1,0 +1,876 @@
+/* Подключение шрифтов */
+@font-face {
+  font-family: "ManropeBold";
+  src: url(../fonts/Manrope-Bold.ttf);
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../fonts/Manrope-Regular.ttf);
+}
+
+@font-face {
+  font-family: "ManropeLight";
+  src: url(../fonts/Manrope-Light.ttf);
+}
+
+/* Сброс базовых стилей */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Manrope", sans-serif;
+  outline: none;
+}
+
+/* Общие стили для всего приложения */
+body {
+  background: #031b34;
+  padding: 0 2rem;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a,
+button {
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+a:hover,
+button:hover {
+  transition: all 0.3s ease-out;
+}
+
+button:hover {
+  background-color: #ae67fa;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+h1 {
+  font-size: 60px;
+  color: #ae67fa;
+}
+
+h2 {
+  font-size: 34px;
+}
+
+h1,
+h2 {
+  font-family: "ManropeBold", sans-serif;
+  background: linear-gradient(90deg, #ae67fa 1.84%, #f49867 102.67%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h3 {
+  font-family: "ManropeBold", sans-serif;
+  color: #fff;
+  font-size: 24px;
+}
+
+h4 {
+  font-family: "ManropeBold", sans-serif;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 16px;
+  color: #fff;
+}
+
+.btn {
+  display: flex;
+  padding: 1rem 2rem;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.primary-btn {
+  background-color: #ff4820;
+}
+
+.section {
+  max-width: 1169px;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.lined_header {
+  background: url("../assets/img/gradient_line.svg") no-repeat 0 0 transparent;
+  padding: 1rem 0;
+}
+
+/* Стили для Шапки */
+.header {
+  display: flex;
+  max-width: 1169px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem 0;
+  position: fixed;
+  justify-content: space-between;
+  align-items: center;
+  background: #031b34;
+  z-index: 1000;
+}
+
+.header .header__logo {
+  width: 162px;
+}
+
+.header .header__menu .menu {
+  display: flex;
+  column-gap: 2rem;
+}
+
+.header .header__menu .menu .menu__item a {
+  color: #fff;
+  border-bottom: 1px solid transparent;
+}
+
+.header .header__menu .menu .menu__item:hover a {
+  border-bottom-color: #fff;
+}
+
+.header .header__menu .menu .menu__item.active a {
+  color: #f49867;
+  border-bottom-color: #f49867;
+}
+
+.header .cta_buttons {
+  display: flex;
+  column-gap: 1rem;
+}
+
+/* Стили для первого экрана (Хиро секция) */
+.hero_section {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 1rem;
+  min-height: 60vh;
+  margin: 14rem 0 3rem;
+}
+
+.hero_section .hero_section__left {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 3rem;
+  width: 75%;
+}
+
+.hero_section .hero_section__left .left__description {
+  color: #81afdd;
+}
+
+.hero_section .hero_section__left .left__cta_buttons {
+  display: flex;
+  width: 100%;
+}
+
+.hero_section .hero_section__left .left__cta_buttons input[type="text"] {
+  min-width: 250px;
+  width: 70%;
+  padding: 8px 32px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #052d56;
+  border-bottom: none;
+  background-color: #052d56;
+  color: #fff;
+}
+
+.hero_section .hero_section__left .left__cta_buttons .btn {
+  border-radius: 0 4px 4px 0;
+}
+
+.hero_section .hero_section__left .left__social_approve {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #81afdd;
+}
+
+.hero_section .hero_section__left .left__social_approve img {
+  height: 30px;
+}
+
+.hero_section .hero_section__right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero_section .hero_section__right img {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Секция брендов */
+.brands_section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0 6rem 0;
+  column-gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.brands_section__img {
+  height: 30px;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.brands_section__img:hover {
+  opacity: 1;
+}
+
+/* Что такое Chat GPT */
+.what_is_chatgpt_section {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  margin: 6rem 0;
+  row-gap: 7rem;
+  background: url(../assets/img/what_is_gpt_3_bg.svg) no-repeat 0 0 / cover;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__top {
+  display: flex;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__top .top__header {
+  flex: 30%;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__top .top__content {
+  flex: 65%;
+  color: #81afdd;
+  font-size: 14px;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__middle {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__middle .middle__header {
+  width: 500px;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__middle a {
+  color: #ff8a71;
+  font-size: 16px;
+  border-bottom: 1px solid transparent;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__middle a:hover {
+  border-bottom: 1px solid #ff8a71;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  column-gap: 2rem;
+}
+
+.what_is_chatgpt_section .what_is_chatgpt_section__bottom .bottom__container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+}
+
+.what_is_chatgpt_section
+  .what_is_chatgpt_section__bottom
+  .bottom__container
+  .container__content {
+  color: #81afdd;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Будущее наступило */
+.future_here {
+  display: flex;
+  column-gap: 6rem;
+  margin: 6rem 0 2rem;
+}
+
+.future_here .future_here__left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 2rem;
+  flex: 2;
+}
+
+.future_here .future_here__left .left__cta {
+  color: #f49867;
+  border-bottom: 1px solid transparent;
+}
+
+.future_here .future_here__left a:hover {
+  border-bottom: 1px solid #f49867;
+}
+
+.future_here .future_here__right {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  row-gap: 3rem;
+}
+
+.future_here .future_here__right .right__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.future_here .future_here__right .right__container .container__header {
+  width: 35%;
+}
+
+.future_here .future_here__right .right__container .container__content {
+  width: 55%;
+  color: #81afdd;
+}
+
+/* Секция "Превосходя все ожидания" */
+.exceeding_expectations {
+  margin: 6rem 0;
+}
+
+.exceeding_expectations__content {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.exceeding_expectations__left {
+  flex: 1;
+  position: relative;
+}
+
+.exceeding_expectations__left img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.exceeding_expectations__right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.exceeding__cta_link1 {
+  color: #81afdd;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+  align-self: flex-start;
+}
+
+.exceeding__cta_link2 {
+  color: #ff8a71;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+  align-self: flex-start;
+}
+
+.exceeding__cta_link1:hover {
+  border-bottom-color: #ff8a71;
+}
+
+.exceeding__cta_link2:hover {
+  border-bottom-color: #81afdd;
+}
+
+.exceeding__header {
+  font-size: 34px;
+  background: linear-gradient(90deg, #ae67fa 1.84%, #f49867 102.67%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.exceeding__description {
+  color: #81afdd;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.cta_section {
+  background: linear-gradient(90deg, #AE67FA 0%, #F49867 100%);
+  padding: 4rem 2rem;
+  border-radius: 11px;
+  margin: 4rem 0;
+}
+
+.cta_container {
+  max-width: 1170px;
+  max-height: 172px;
+  margin: 0 auto;
+}
+
+.cta_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.cta_text {
+  text-align: left;
+  flex: 2;
+}
+
+.cta_badge {
+  font-size: 12px;
+  color: #0E0E0E;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.cta_title {
+  font-size: 24px;
+  color: #000;
+  background: none;
+  -webkit-text-fill-color: #000;
+  font-weight: bold;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.cta_button_container {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cta_button {
+  background: #000;
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.cta_button:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+/* Адаптивность для мобильных устройств */
+@media screen and (max-width: 768px) {
+  .cta_content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .cta_text {
+    text-align: center;
+  }
+  
+  .cta_button_container {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .cta_title {
+    font-size: 24px;
+  }
+}
+
+/* Future Access Section */
+.future-access-section {
+  margin: 6rem 0;
+  padding: 2rem 0;
+}
+
+.future-access-container {
+  max-width: 1170px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.future-access-title {
+  font-size: 48px;
+  background: linear-gradient(90deg, #AE67FA 0%, #F49867 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 3rem;
+  line-height: 1.2;
+  font-family: "ManropeBold", sans-serif;
+}
+
+.future-access-button {
+  background: #FF4820;
+  color: #fff;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Manrope", sans-serif;
+}
+
+.future-access-button:hover {
+  background: #FF6B47;
+  transform: translateY(-2px);
+}
+
+/* Адаптивность для Future Access Section */
+@media screen and (max-width: 1024px) {
+  .future-access-title {
+    font-size: 36px;
+  }
+  
+  .future-access-button {
+    padding: 1.2rem 2.5rem;
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .future-access-title {
+    font-size: 28px;
+  }
+  
+  .future-access-button {
+    padding: 1rem 2rem;
+    font-size: 14px;
+  }
+  
+  .future-access-section {
+    margin: 4rem 0;
+    padding: 1rem 0;
+  }
+}
+
+/* Blog Section */
+.blog_section {
+  margin: 6rem 0;
+}
+
+.blog_header {
+  font-size: 48px;
+  background: linear-gradient(90deg, #AE67FA 0%, #F49867 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4rem;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.blog_container {
+  display: flex;
+  gap: 2rem;
+}
+
+.blog_main {
+  flex: 1;
+}
+
+.blog_secondary {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.blog_card {
+  background: #042C54;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.blog_card:hover {
+  transform: translateY(-5px);
+}
+
+.blog_card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.blog_card.main_card img {
+  height: 420px;
+}
+
+.blog_content {
+  padding: 1.5rem;
+}
+
+.blog_date {
+  color: #81AFDD;
+  font-size: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.blog_title {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  font-family: "ManropeBold", sans-serif;
+}
+
+.blog_read_more {
+  color: #FF8A71;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.blog_read_more:hover {
+  border-bottom-color: #FF8A71;
+}
+
+/* Адаптивность для блога */
+@media screen and (max-width: 1024px) {
+  .blog_container {
+    flex-direction: column;
+  }
+  
+  .blog_secondary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .blog_header {
+    font-size: 36px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .blog_secondary {
+    grid-template-columns: 1fr;
+  }
+  
+  .blog_header {
+    font-size: 28px;
+  }
+  
+  .blog_card img {
+    height: 180px;
+  }
+  
+  .blog_card.main_card img {
+    height: 220px;
+  }
+  
+  .blog_title {
+    font-size: 16px;
+  }
+}
+
+/* Footer Section */
+.footer {
+  background: #031B34;
+  padding: 4rem 0 2rem;
+  margin-top: 4rem;
+}
+
+.footer_content {
+  display: flex;
+  justify-content: space-between;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.footer_logo {
+  flex: 1;
+}
+
+.footer_logo p {
+  color: #fff;
+  font-size: 12px;
+}
+
+.footer_title {
+  font-size: 28px;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #AE67FA 0%, #F49867 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer_address {
+  color: #81afdd;
+}
+
+.footer_addresss {
+  padding: 2rem 0 4rem;
+  color: #81afdd;
+}
+
+.footer_links {
+  flex: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.link_group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.link_group a {
+  color: #fff;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.link_group a:hover {
+  color: #ff8a71;
+}
+
+.link_name {
+  height: 100pt;
+}
+
+.footer_bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #81afdd;
+  font-size: 14px;
+}
+
+/* Медиа запросы для адаптива */
+@media screen and (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+  }
+  
+  .hero_section {
+    flex-direction: column;
+    margin: 8rem 0 3rem;
+  }
+  
+  .hero_section__left {
+    width: 100% !important;
+  }
+  
+  .what_is_chatgpt_section__top,
+  .what_is_chatgpt_section__middle,
+  .future_here,
+  .exceeding_expectations__content {
+    flex-direction: column;
+  }
+  
+  .cta_content {
+    text-align: center;
+    align-items: center;
+  }
+  
+  .cta_text {
+    text-align: center;
+  }
+  
+  .cta_button_container {
+    justify-content: center;
+  }
+  
+  .footer_content {
+    flex-direction: column;
+  }
+  
+  .footer_links {
+    flex-direction: column;
+  }
+  
+  .exceeding_expectations__content {
+    gap: 2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding: 0 1rem;
+  }
+  
+  h1 {
+    font-size: 40px;
+  }
+  
+  h2 {
+    font-size: 28px;
+  }
+  
+  .header__menu .menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .left__cta_buttons {
+    flex-direction: column;
+  }
+  
+  .brands_section {
+    justify-content: center;
+  }
+  
+  .what_is_chatgpt_section__bottom {
+    flex-direction: column;
+  }
+  
+  .exceeding__header {
+    font-size: 28px;
+  }
+  
+  .cta_title {
+    font-size: 24px;
+  }
+  
+  .cta_button {
+    padding: 0.8rem 2rem;
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Library — Вход</title>
+
+    <style>
+        :root{
+          --border: 4px solid #000;
+          --w: 420px;
+        }
+        *{ box-sizing:border-box; }
+
+        body{
+          margin:0;
+          background:#fff;
+          color:#000;
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+        .page{
+          min-height:100vh;
+          display:flex;
+          align-items:flex-start;
+          justify-content:center;
+          padding:64px 20px;
+        }
+
+        .wrap{
+          width: min(var(--w), 100%);
+          text-align:center;
+        }
+
+        h1{
+          margin: 0 0 56px 0;
+          font-size: 56px;
+          font-weight: 800;
+          letter-spacing: .3px;
+        }
+
+        .field{
+          width:100%;
+          border: var(--border);
+          padding: 14px 14px;
+          margin: 0 auto 28px auto;
+          font-size: 20px;
+          font-weight: 700;
+          outline:none;
+          background:#fff;
+          color:#000;
+        }
+
+        .field::placeholder{
+          color:#000;
+          opacity:1;
+          font-weight:700;
+        }
+
+        .btn{
+          width:100%;
+          border: var(--border);
+          padding: 14px 14px;
+          margin-top: 8px;
+          font-size: 20px;
+          font-weight: 800;
+          background:#fff;
+          color:#000;
+          cursor:pointer;
+        }
+
+        .btn:hover{
+          background:#000;
+          color:#fff;
+        }
+
+        .link{
+          display:inline-block;
+          margin-top: 18px;
+          font-size: 22px;
+          font-weight: 700;
+          color: #1f45ff;
+          text-decoration:none;
+          cursor:pointer;
+        }
+
+        .link:hover{
+          text-decoration: underline;
+        }
+
+        .hint{
+          margin-top: 16px;
+          font-size: 14px;
+          font-weight: 800;
+          opacity: .85;
+          line-height: 1.25;
+        }
+
+        .error{
+          margin: 0 0 18px 0;
+          border: var(--border);
+          padding: 10px 12px;
+          font-weight: 900;
+          display:none;
+          background:#ffcccc;
+        }
+
+        .success{
+          margin: 0 0 18px 0;
+          border: var(--border);
+          padding: 10px 12px;
+          font-weight: 900;
+          display:none;
+          background:#ccffcc;
+          color:#000;
+        }
+
+        .loading{
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<main class="page">
+    <section class="wrap" aria-label="Вход">
+        <h1>Library</h1>
+
+        <div class="error" id="errBox"></div>
+
+        <input id="login" class="field" type="text" placeholder="Введите имя пользователя" />
+        <input id="password" class="field" type="password" placeholder="Введите пароль" />
+
+        <button class="btn" id="loginBtn" type="button">Войти</button>
+
+        <a id="registerLink" class="link" href="register.html">Регистрация</a>
+
+        <div class="hint">
+            ТЕСТ:<br/>
+            логин <b>student</b> → student.html<br/>
+            логин <b>teacher</b> → teacher.html<br/>
+            логин <b>librarian</b> → librarian.html
+        </div>
+    </section>
+</main>
+
+<script>
+    const API_URL = 'http://localhost:8080/api';
+    const loginInput = document.getElementById('login');
+    const passInput  = document.getElementById('password');
+    const loginBtn   = document.getElementById('loginBtn');
+    const errBox     = document.getElementById('errBox');
+
+    function showError(msg){
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+      errBox.className = 'error';
+      setTimeout(() => errBox.style.display = 'none', 3500);
+    }
+
+    function showSuccess(msg){
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+      errBox.className = 'success';
+      setTimeout(() => errBox.style.display = 'none', 2500);
+    }
+
+    async function login(){
+      const username = (loginInput.value || "").trim();
+      const password = (passInput.value || "").trim();
+
+      if (!username || !password) {
+        showError("Введите логин и пароль");
+        return;
+      }
+
+      loginBtn.classList.add('loading');
+      loginBtn.disabled = true;
+
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.user) {
+          showSuccess("Успешный вход! Перенаправление...");
+          
+          // Сохраняем данные в localStorage
+          localStorage.setItem('sessionId', data.sessionId);
+          localStorage.setItem('user', JSON.stringify(data.user));
+
+          // Перенаправляем по ролям
+          setTimeout(() => {
+            const userType = data.user.userType.toLowerCase();
+            if (userType === 'student') {
+              window.location.href = 'student.html';
+            } else if (userType === 'professor') {
+              window.location.href = 'teacher.html';
+            } else if (userType === 'librarian') {
+              window.location.href = 'librarian.html';
+            } else {
+              showError("Неизвестная роль пользователя");
+              loginBtn.classList.remove('loading');
+              loginBtn.disabled = false;
+            }
+          }, 1500);
+        } else {
+          showError(data.message || "Ошибка входа");
+          loginBtn.classList.remove('loading');
+          loginBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Ошибка при входе:', error);
+        showError("Ошибка подключения к серверу. Убедитесь, что сервер запущен на http://localhost:8080");
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+      }
+    }
+
+    loginBtn.addEventListener('click', login);
+
+    passInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') login();
+    });
+
+    // Cache-busting: ensure registration opens latest file (avoid old cached copy)
+    const regLink = document.getElementById('registerLink');
+    if (regLink) {
+      regLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = 'register.html?ts=' + Date.now();
+        window.location.href = target;
+      });
+    }
+</script>
+</body>
+</html>
